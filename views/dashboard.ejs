@@ -1,0 +1,137 @@
+<link rel="stylesheet" href="../assets/css/styles.css">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-dark" style="margin-left: -210px; margin-right: -200px;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Habit tracker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          
+        </ul>
+        <div class="d-inline mt-4 d-flex justify-content-between" style="margin-left: 80%;">
+            <p class=" float-right mb-3 mx-3" style="color: rgb(64, 121, 200);">Welcome <%= user.name %></p>
+        </div>
+        <div class="d-inline">
+            <a href="/users/logout" class="btn" style="background-color: rgb(28, 101, 218);" >Logout</a>
+        </div>
+        
+      </div>
+    </div>
+  </nav>
+<!-- Dashboard view -->
+
+<!-- Habit Container -->
+<div class="habit-container text-center my-4" style="
+background: hsla(194, 64%, 65%, 0.7);
+backdrop-filter: blur(80px);
+">
+    
+    
+    <%- include ("./partials/messages") %>
+    <div class="habit container">
+        <form action="/dashboard" method="POST" class="habit-header mb-4">
+            <input type="text" name="content" placeholder="Enter Habit" required style=" border: 1px solid rgb(84, 84, 84);">
+            <button type="submit" class="add-btn bg-info"><span class="fas fa-plus"></span></button>
+        </form>
+        <form action="/user-view" method="POST" class="habit-header my-4">
+            <div class="btn-group mb-2" aria-label="Change View">
+                <% if(user.view === "daily"){ %>
+                <button type="submit" class="btn btn-primary active" aria-pressed="true">Daily</button>
+                <button type="submit" class="btn btn-success">Weekly</button>
+                <% } else { %>
+                <button type="submit" class="btn btn-success">Daily</button>
+                <button type="submit" class="btn btn-primary active" aria-pressed="true">Weekly</button>
+                <% } %>
+            </div>
+        </form>
+        <i class="fas fa-check-circle" style="color: rgb(121, 236, 14);"></i>
+        -Done&emsp;&emsp;
+        <i class="fas fa-times-circle" style="color: #a52f2b;"></i>
+        -Not Done&emsp;&emsp;
+        <i class="fas fa-minus-circle" style="color: gold;"></i>
+        -Unmarked&emsp;&emsp;
+        <% if(user.view === "daily"){ %>
+        <ul class="habit-list ">
+            <% habits.forEach(details => { let tzoffset = (new Date()).getTimezoneOffset() * 60000, found=false, status='';
+                var today = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
+                details.dates.find(function (item, index) {
+                    if(item.date === today)
+                    {
+                        found = true;
+                        status = item.complete;
+                    }
+                });
+                %>
+            <li class="habit-list-item">
+                <a href="status-update/?id=<%= details._id %>&date=<%= today %>" class="status">
+                    <% if(found && status==='yes'){ %>
+                    <i class="fas fa-check-circle"></i>
+                    <% } else if(found && status==='no'){ %>
+                    <i class="fas fa-times-circle"></i>
+                    <% } else { %>
+                    <i class="fas fa-minus-circle"></i>
+                    <% } %>
+                </a>
+                &emsp;
+                <div class="habit-list-item-name" style="color: rgb(43, 52, 226);font-size: 25px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif,Arial, Helvetica, sans-serif;"><%= details.content %></div>
+                <a href="/favorite-habit/?id=<%= details._id %>" class="favorite">
+                    <% if(details.favorite) { %>
+                    <i class="fas fa-star"></i>
+                    <% } else { %>
+                    <i class="far fa-star"></i>
+                    <% } %>
+                </a>
+                <a href="/remove/?id=<%= details._id %>" class="remove">
+                    <i class="far fa-trash-alt"></i>
+                </a>
+            </li>
+            <% }) %>
+        </ul>
+        <% } else { %>
+        <ul class="habit-list text-center">
+            <% habits.forEach(details => { %>
+            <li class="habit-list-item">
+                <div class="habit-list-item-name " style="padding: 3px;"><%= details.content %></div>
+                <a href="/favorite-habit/?id=<%= details._id %>" class="favorite">
+                    <% if(details.favorite) { %>
+                    <i class="fas fa-star"></i>
+                    <% } else { %>
+                    <i class="far fa-star"></i>
+                    <% } %>
+                </a>
+                <a href="/remove/?id=<%= details._id %>" class="remove">
+                    <i class="far fa-trash-alt"></i>
+                </a>
+                <% days.forEach(day => { let found = false, status = '';
+                details.dates.find(function (item, index) {
+                    if(item.date === day.date)
+                    {
+                        found = true;
+                        status = item.complete;
+                    }
+                });
+                %>
+                <div class="dotw">
+                    <div class="day mt-0 " style="color: rgb(231, 238, 238);"><span><%= day.day + ", " + day.date.slice(-2) %></span></div>
+                    <a href="status-update/?id=<%= details._id %>&date=<%= day.date %>" class="status2 mt-4">
+                        <% if(found && status==='yes'){ %>
+                        <i class="fas fa-check-circle"></i>
+                        <% } else if(found && status==='no'){ %>
+                        <i class="fas fa-times-circle"></i>
+                        <% } else { %>
+                        <i class="fas fa-minus-circle"></i>
+                        <% } %>
+                    </a>
+                </div>
+                <% }) %>
+            </li>
+            <% }) %>
+        </ul>
+        <% } %>
+    </div>
+</div>

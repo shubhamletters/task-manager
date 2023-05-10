@@ -1,0 +1,68 @@
+<!-- Section: Design Block -->
+<section class="text-center text-lg-start">
+  <style>
+    .cascading-right {
+      margin-right: -50px;
+    }
+    .welcome-card{
+      height: 500px;
+      padding-top: 100px;
+    }
+    @media (max-width: 991.98px) {
+      .cascading-right {
+        margin-right: 0;
+      }
+    }
+  </style>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-primary" style="margin-left: -210px; margin-right: -200px;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Habit tracker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/">About</a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="container py-4 col-lg-8 mb-8 mb-lg-0 mx-10">
+    <div class="row g-0 align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="card p-5 welcome-card cascading-right" style="
+            background: hsla(0, 0%, 80%, 0.7);
+            backdrop-filter: blur(80px);
+            ">
+            <h3 class="text-center mb-3">LOGIN</h3>
+            <%- include ("./partials/messages") %>
+            <form action="/users/login" method="POST">
+              <div class="form-group">
+                <!-- <label for="email">Email</label> -->
+                <input type="email" id="email" name="email" required class="form-control" placeholder="Enter Email" />
+              </div>
+              <button type="submit" class="btn btn-info btn-block">Login</button>
+            </form>
+            <p class="lead mt-4">
+              New User? <a href="/users/register">Register</a>
+            </p>
+
+        </div>
+        </div>
+
+        
+      </div>
+    </div>
+    <!-- Jumbotron -->
+</section>
+<!-- Section: Design Block -->
